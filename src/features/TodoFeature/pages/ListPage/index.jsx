@@ -12,17 +12,17 @@ function ListPage(props) {
         {
             id: 1,
             title: "test1",
-            status: 'ok',
+            status: 'completed',
         },
         {
             id: 2,
             title: "test2",
-            status: 'notok',
+            status: 'completed',
         },
         {
             id: 3,
             title: "test3",
-            status: 'ok',
+            status: 'incompleted',
         },
     ];
     const location = useLocation();
@@ -42,12 +42,11 @@ function ListPage(props) {
 
 
 
-    const handleTodoClick = (todo, index) => {
-        console.log(todo, index)
+    const handleTodoClick = (index) => {
         let newTodoList = [...todoList];
         newTodoList[index] = {
             ...newTodoList[index],
-            status: newTodoList[index].status === 'ok' ? 'notok' : 'ok',
+            status: newTodoList[index].status === 'completed' ? 'incompleted' : 'completed',
         }
         setTodoList(newTodoList);
     }
@@ -62,7 +61,7 @@ function ListPage(props) {
     }
 
     const handleShowOkClick = () => {
-        const queryParams = { status: 'ok' };
+        const queryParams = { status: 'completed' };
         history.push({
             pathname: match.path,
             search: queryString.stringify(queryParams),
@@ -70,7 +69,7 @@ function ListPage(props) {
     }
 
     const handleShowNotOkClick = () => {
-        const queryParams = { status: 'notok' };
+        const queryParams = { status: 'incompleted' };
         history.push({
             pathname: match.path,
             search: queryString.stringify(queryParams),
@@ -85,8 +84,8 @@ function ListPage(props) {
             <TodoList todoList={renderedTodoList} onTodoClick={handleTodoClick}></TodoList>
             <div>
                 <button onClick={handleShowAllClick}>Show All</button>
-                <button onClick={handleShowOkClick}>Show Ok</button>
-                <button onClick={handleShowNotOkClick}>Show NotOK</button>
+                <button onClick={handleShowOkClick}>Show Completed</button>
+                <button onClick={handleShowNotOkClick}>Show Incompleted</button>
             </div>
         </div>
     );
