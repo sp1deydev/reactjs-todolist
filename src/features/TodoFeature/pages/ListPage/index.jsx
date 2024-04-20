@@ -2,6 +2,7 @@ import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min.js';
 import TodoList from '../../components/TodoList/index.jsx';
+import { Radio } from 'antd';
 
 ListPage.propTypes = {
     
@@ -11,17 +12,17 @@ function ListPage(props) {
     const initTodoList = [
         {
             id: 1,
-            title: "test1",
+            title: "Reading Books",
             status: 'completed',
         },
         {
             id: 2,
-            title: "test2",
+            title: "Play Football",
             status: 'completed',
         },
         {
             id: 3,
-            title: "test3",
+            title: "Do Homeworks",
             status: 'incompleted',
         },
     ];
@@ -52,24 +53,8 @@ function ListPage(props) {
     }
 
     //filter buttons
-    const handleShowAllClick = () => {
-        const queryParams = { status: 'all' };
-        history.push({
-            pathname: match.path,
-            search: queryString.stringify(queryParams),
-        })
-    }
-
-    const handleShowOkClick = () => {
-        const queryParams = { status: 'completed' };
-        history.push({
-            pathname: match.path,
-            search: queryString.stringify(queryParams),
-        })
-    }
-
-    const handleShowNotOkClick = () => {
-        const queryParams = { status: 'incompleted' };
+    const handleFilterClick = (filterStatus) => {
+        const queryParams = { status:  filterStatus};
         history.push({
             pathname: match.path,
             search: queryString.stringify(queryParams),
@@ -81,12 +66,15 @@ function ListPage(props) {
     return (
         <div>
             <h3>TodoList</h3>
+            <Radio.Group value={filter} onChange={(e) => handleFilterClick(e.target.value)}>
+                <Radio.Button value="all">All</Radio.Button>
+                <Radio.Button value="completed">Completed</Radio.Button>
+                <Radio.Button value="incompleted">Incompleted</Radio.Button>
+            </Radio.Group>
+            <br />
+            <br />
             <TodoList todoList={renderedTodoList} onTodoClick={handleTodoClick}></TodoList>
-            <div>
-                <button onClick={handleShowAllClick}>Show All</button>
-                <button onClick={handleShowOkClick}>Show Completed</button>
-                <button onClick={handleShowNotOkClick}>Show Incompleted</button>
-            </div>
+        
         </div>
     );
 }

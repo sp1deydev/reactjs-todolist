@@ -31,6 +31,7 @@ function TodoList(props) {
           <Tag
             color={status == "completed" ? "green" : "volcano"}
             onClick={() => handleClickStatus(index)}
+            style={{cursor:'pointer'}}
           >
             {status.toUpperCase()}
           </Tag>
