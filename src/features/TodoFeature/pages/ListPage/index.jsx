@@ -43,7 +43,8 @@ function ListPage(props) {
 
 
 
-    const handleTodoClick = (index) => {
+    const handleTodoClick = (id) => {
+        let index = todoList.findIndex(todo => todo.id === id);
         let newTodoList = [...todoList];
         newTodoList[index] = {
             ...newTodoList[index],

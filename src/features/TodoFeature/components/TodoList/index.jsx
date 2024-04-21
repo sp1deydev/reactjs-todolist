@@ -20,6 +20,7 @@ function TodoList(props) {
       title: "Title",
       dataIndex: "title",
       key: "title",
+      // eslint-disable-next-line
       render: (text) => <a>{text}</a>,
     },
     {
@@ -29,8 +30,8 @@ function TodoList(props) {
       render: (_, { id, status }, index) => (
         <>
           <Tag
-            color={status == "completed" ? "green" : "volcano"}
-            onClick={() => handleClickStatus(index)}
+            color={status === "completed" ? "green" : "volcano"}
+            onClick={() => handleClickStatus(id)}
             style={{cursor:'pointer'}}
           >
             {status.toUpperCase()}
