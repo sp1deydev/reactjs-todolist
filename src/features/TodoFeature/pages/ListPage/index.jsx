@@ -42,14 +42,28 @@ function ListPage(props) {
     }, [location.search] )
 
 
-
-    const handleTodoClick = (id) => {
+    const handleStatusClick = (id) => {
         let index = todoList.findIndex(todo => todo.id === id);
         let newTodoList = [...todoList];
         newTodoList[index] = {
             ...newTodoList[index],
             status: newTodoList[index].status === 'completed' ? 'incompleted' : 'completed',
         }
+        setTodoList(newTodoList);
+    }
+    const handleUpdate = (id, title) => {
+        let index = todoList.findIndex(todo => todo.id === id);
+        let newTodoList = [...todoList];
+        newTodoList[index] = {
+            ...newTodoList[index],
+            title: title,
+        }
+        setTodoList(newTodoList);
+    }
+    const handleDelete = (id) => {
+        let index = todoList.findIndex(todo => todo.id === id);
+        let newTodoList = [...todoList];
+        newTodoList.splice(index, 1)
         setTodoList(newTodoList);
     }
 
@@ -74,7 +88,13 @@ function ListPage(props) {
             </Radio.Group>
             <br />
             <br />
-            <TodoList todoList={renderedTodoList} onTodoClick={handleTodoClick}></TodoList>
+            <TodoList 
+                todoList={renderedTodoList} 
+                onStatusClick={handleStatusClick}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+            >
+            </TodoList>
         
         </div>
     );
