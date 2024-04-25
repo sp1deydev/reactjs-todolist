@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { Space, Table, Tag } from "antd";
 import React, { useState } from "react";
 import { Input, message, Popconfirm } from 'antd';
+import { useHistory, useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 TodoList.propTypes = {
   todoList: PropTypes.array,
@@ -17,6 +18,8 @@ TodoList.defaultProps = {
 };
 
 function TodoList(props) {
+  const history = useHistory();
+  const match = useRouteMatch();
   const [messageApi, contextHolder] = message.useMessage();
   const [editTitle, setEditTitle] = useState();
   const [editId, setEditId] = useState();
@@ -55,6 +58,10 @@ function TodoList(props) {
   const handleDelete = (id) => {
       props.onDelete(id)
       setEditId();
+  }
+
+  const handleView = (id) => {
+      history.push(match.path + '/' + `${id}`)
   }
 
 
@@ -101,7 +108,7 @@ function TodoList(props) {
         else
           return (
             <Space size="middle">
-              <a>View</a>
+              <a onClick={()=>handleView(record.id)}>View</a>
               <a onClick={()=>handleEdit(record.id, record.title)}>Edit</a>
               <Popconfirm
                 title="Delete the task"
