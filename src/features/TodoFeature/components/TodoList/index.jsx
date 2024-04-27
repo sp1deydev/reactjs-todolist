@@ -1,20 +1,23 @@
 import PropTypes from "prop-types";
 import { Space, Table, Tag } from "antd";
 import React, { useState } from "react";
-import { Input, message, Popconfirm, Button, Modal } from 'antd';
+import { Input, message, Popconfirm, Button, Modal, Form, Radio } from 'antd';
 import { useHistory, useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+import './style.css'
 
 TodoList.propTypes = {
   todoList: PropTypes.array,
   onStatusClick: PropTypes.func,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onAdd: PropTypes.func,
 };
 TodoList.defaultProps = {
   todoList: [],
   onStatusClick: null,
   onUpdate: null,
   onDelete: null,
+  onAdd: null,
 };
 
 function TodoList(props) {
@@ -24,7 +27,32 @@ function TodoList(props) {
   const [editTitle, setEditTitle] = useState();
   const [editId, setEditId] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      // do something with values
+      props.onAdd(values);
+      form.resetFields();
+      setIsModalOpen(false);
+    }).catch((err) => {
+      // form validation failed
+      console.log(err)
+   })
+  };
+
+  const handleCancel = () => {
+    form.resetFields();
+    setIsModalOpen(false);
+  };
+  
+  const onReset = () => {
+    form.resetFields();
+  };
 
   const handleToggleStatus = (index) => {
     props.onStatusClick(index);
@@ -66,17 +94,6 @@ function TodoList(props) {
       history.push(match.path + '/' + `${id}`)
   }
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
 
   const columns = [
@@ -142,13 +159,41 @@ function TodoList(props) {
   return (
     <>
       {contextHolder}
-      <Button type="primary" onClick={showModal}>
-        Open Modal
+      <Button type="primary" onClick={showModal} className="add-new-btn">
+        Add New
       </Button>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+      <Modal 
+        title="Add New Task" 
+        style={{ maxWidth: 350 }}
+        open={isModalOpen} 
+        onCancel={handleCancel}
+        footer={[
+          <Button key="reset" onClick={onReset} >
+            Reset
+          </Button>,
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk} htmlType="submit">
+            Add
+          </Button>,
+          ,
+        ]}
+      >
+        <Form
+          form={form}
+          name="control-hooks"
+        >
+          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+              <Radio.Group>
+                <Radio value="incompleted"> Incompleted </Radio>
+                <Radio value="completed"> Completed </Radio>
+              </Radio.Group>
+            </Form.Item>
+        </Form>
       </Modal>
       <Table columns={columns} dataSource={props.todoList} />
     </>

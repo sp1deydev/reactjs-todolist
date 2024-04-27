@@ -76,6 +76,15 @@ function ListPage(props) {
         })
     }
 
+    //add new task btn
+    const handleAdd = (task) => {
+        console.log(task);
+        let newTask ={...task, id: Math.random().toString(36).substring(2, 6)};
+        let newTodoList = [...todoList];
+        newTodoList.push(newTask);
+        setTodoList(newTodoList);
+    }
+
     const renderedTodoList = todoList.filter(todo => filter === "all" || filter === todo.status)
 
     return (
@@ -93,6 +102,7 @@ function ListPage(props) {
                 onStatusClick={handleStatusClick}
                 onUpdate={handleUpdate}
                 onDelete={handleDelete}
+                onAdd={handleAdd}
             >
             </TodoList>
         
