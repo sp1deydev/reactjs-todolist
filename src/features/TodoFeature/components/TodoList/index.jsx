@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Space, Table, Tag } from "antd";
 import React, { useState } from "react";
-import { Input, message, Popconfirm } from 'antd';
+import { Input, message, Popconfirm, Button, Modal } from 'antd';
 import { useHistory, useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 TodoList.propTypes = {
@@ -23,6 +23,8 @@ function TodoList(props) {
   const [messageApi, contextHolder] = message.useMessage();
   const [editTitle, setEditTitle] = useState();
   const [editId, setEditId] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const handleToggleStatus = (index) => {
     props.onStatusClick(index);
@@ -63,6 +65,18 @@ function TodoList(props) {
   const handleView = (id) => {
       history.push(match.path + '/' + `${id}`)
   }
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
 
   const columns = [
@@ -128,6 +142,14 @@ function TodoList(props) {
   return (
     <>
       {contextHolder}
+      <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button>
+      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
       <Table columns={columns} dataSource={props.todoList} />
     </>
   )
