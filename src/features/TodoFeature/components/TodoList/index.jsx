@@ -93,8 +93,7 @@ function TodoList(props) {
   const handleView = (id) => {
       history.push(match.path + '/' + `${id}`)
   }
-
-
+  
 
   const columns = [
     {

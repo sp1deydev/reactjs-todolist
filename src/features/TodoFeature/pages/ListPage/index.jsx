@@ -3,38 +3,30 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min.js';
 import TodoList from '../../components/TodoList/index.jsx';
 import { Radio } from 'antd';
+import handleLocalStorage from '../../../../utils/handleLocalStorage.js';
 
 ListPage.propTypes = {
     
 };
 
 function ListPage(props) {
-    const initTodoList = [
-        {
-            id: 1,
-            title: "Reading Books",
-            status: 'completed',
-        },
-        {
-            id: 2,
-            title: "Play Football",
-            status: 'completed',
-        },
-        {
-            id: 3,
-            title: "Do Homeworks",
-            status: 'incompleted',
-        },
-    ];
+
     const location = useLocation();
     const history = useHistory();
     const match = useRouteMatch();
-    const [todoList, setTodoList] = useState(initTodoList);
+    const [todoList, setTodoList] = useState([]);
     const [filter, setFilter] = useState(() => {
         const urlParams = queryString.parse(location.search);
         return urlParams.status || 'all';
 
     });
+
+    useEffect(() => {
+        let initTodoList = handleLocalStorage.get('todoList');
+        if (initTodoList) {
+            setTodoList(initTodoList);
+        }
+    }, [])
 
     useEffect(() => {
         const urlParams = queryString.parse(location.search);
@@ -50,7 +42,9 @@ function ListPage(props) {
             status: newTodoList[index].status === 'completed' ? 'incompleted' : 'completed',
         }
         setTodoList(newTodoList);
+        handleLocalStorage.set('todoList', newTodoList);
     }
+    
     const handleUpdate = (id, title) => {
         let index = todoList.findIndex(todo => todo.id === id);
         let newTodoList = [...todoList];
@@ -59,12 +53,15 @@ function ListPage(props) {
             title: title,
         }
         setTodoList(newTodoList);
+        handleLocalStorage.set('todoList', newTodoList);
     }
+
     const handleDelete = (id) => {
         let index = todoList.findIndex(todo => todo.id === id);
         let newTodoList = [...todoList];
         newTodoList.splice(index, 1)
         setTodoList(newTodoList);
+        handleLocalStorage.set('todoList', newTodoList);
     }
 
     //filter buttons
@@ -83,6 +80,7 @@ function ListPage(props) {
         let newTodoList = [...todoList];
         newTodoList.push(newTask);
         setTodoList(newTodoList);
+        handleLocalStorage.set('todoList', newTodoList);
     }
 
     const renderedTodoList = todoList.filter(todo => filter === "all" || filter === todo.status)
