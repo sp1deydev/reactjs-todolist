@@ -103,7 +103,7 @@ function TodoList(props) {
       // eslint-disable-next-line
       render: (_, record) => {
         if(record.id === editId)
-          return <Input placeholder="Input title" name="title" value={editTitle} onChange={(event) => handEditFormChange(event)} variant="borderless" />
+          return <Input placeholder="Input title" name="title" value={editTitle} onChange={(event) => handEditFormChange(event)} variant="borderless" autoFocus/>
         else
          return <a>{record.title}</a>
       },
