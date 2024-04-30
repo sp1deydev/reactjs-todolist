@@ -5,7 +5,13 @@ import './style.css'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 TodoDetail.propTypes = {
-    
+    todo: PropTypes.object,
+    onStatusClick: PropTypes.func,
+
+};
+TodoDetail.defaultProps = {
+    todo: {},
+    onStatusClick: null,
 };
 
 function TodoDetail(props) {
@@ -14,16 +20,19 @@ function TodoDetail(props) {
     const handleBackToList = () => {
         history.goBack();
     }
+    const handleToggleStatus = (id) => {
+        props.onStatusClick(id);
+    }
     
     return (
         <div>
-            <Card className='card-container' title="TodoTitle" extra={<Button type="text" onClick={()=>handleBackToList()}>Back To List</Button>}>
+            <Card className='card-container' title={props.todo.title} extra={<Button type="text" onClick={()=>handleBackToList()}>Back To List</Button>}>
             <Tag
-                // color={status === "completed" ? "green" : "volcano"}
-                // onClick={() => handleToggleStatus(id)}
+                color={props.todo.status === "completed" ? "green" : "volcano"}
+                onClick={() => handleToggleStatus(props.todo.id)}
                 style={{cursor:'pointer'}}
             >
-                completed
+                {props.todo.status}
             </Tag>
             </Card>
         </div>
