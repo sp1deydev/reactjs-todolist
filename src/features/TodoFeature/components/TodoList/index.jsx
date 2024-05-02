@@ -194,7 +194,7 @@ function TodoList(props) {
             </Form.Item>
         </Form>
       </Modal>
-      <Table columns={columns} dataSource={props.todoList} />
+      <Table columns={columns} dataSource={props.todoList} pagination={{ defaultPageSize: 6, total: props.todoList.length}}/>
     </>
   )
 }
